@@ -16,11 +16,17 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 })
 .then(() => console.log("MongoDB connected"))
-.catch((err) => console.log(err));
+.catch((err) => console.log("MongoDB connection error:", err));
 
 // Routes
 const patientRoutes = require("./routes/patient");
 app.use("/api/patient", patientRoutes);
+
+const doctorRoutes = require("./routes/doctor");
+app.use("/api/doctor", doctorRoutes);
+
+// Default route
+app.get("/", (req, res) => res.send("API is running"));
 
 // Start server
 const PORT = process.env.PORT || 5000;

@@ -1,33 +1,48 @@
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 
-// export const DoctorLogin = ({ onClose }) => {
-//   const [username, setUsername] = useState("");
+// export const DoctorSignup = ({ onClose }) => {
 //   const [doctorId, setDoctorId] = useState("");
+//   const [username, setUsername] = useState("");
 //   const [password, setPassword] = useState("");
+//   const [confirmPassword, setConfirmPassword] = useState("");
 //   const [message, setMessage] = useState("");
+
 //   const navigate = useNavigate();
 
-//   const handleLogin = (e) => {
+//   const handleSignup = async (e) => {
 //     e.preventDefault();
+//     if (password !== confirmPassword) {
+//       setMessage("⚠️ Passwords do not match!");
+//       return;
+//     }
 
-//     if (username && doctorId && password) {
-//       setMessage("✅ Doctor login successful!");
-//       // Redirect to dashboard
-//       setTimeout(() => navigate("/doctor-dashboard"), 1000);
-//     } else {
-//       setMessage("⚠️ Please fill all fields!");
+//     try {
+//       const res = await fetch("http://localhost:5000/api/doctor/signup", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ doctorId, username, password }),
+//       });
+
+//       const data = await res.json();
+//       if (res.ok) {
+//         setMessage("✅ Signup Successful! Please login.");
+//       } else {
+//         setMessage(data.message);
+//       }
+//     } catch (err) {
+//       setMessage("⚠️ Server error. Try again.");
 //     }
 //   };
 
-//   // Same overlay and box style like PatientLogin
-//   const overlayStyle = {
-//     position: "fixed",
-//     inset: 0,
+//   // Styles
+//   const pageStyle = {
 //     display: "flex",
-//     alignItems: "center",
 //     justifyContent: "center",
-//     backgroundColor: "rgba(0,0,0,0.4)",
+//     alignItems: "center",
+//     minHeight: "100vh", // so it adapts even on smaller screens
+//     backgroundColor: "#f4f6f8",
+//     padding: "20px",
 //   };
 
 //   const boxStyle = {
@@ -35,7 +50,8 @@
 //     padding: "30px",
 //     borderRadius: "10px",
 //     boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-//     width: "400px",
+//     width: "100%",
+//     maxWidth: "400px", // ensures it fits
 //   };
 
 //   const inputStyle = {
@@ -60,21 +76,12 @@
 //   };
 
 //   return (
-//     <div style={overlayStyle}>
+//     <div style={pageStyle}>
 //       <div style={boxStyle}>
 //         <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-//           Doctor Login
+//           Doctor Sign Up
 //         </h2>
-//         <form onSubmit={handleLogin}>
-//           <label>Username:</label>
-//           <input
-//             type="text"
-//             placeholder="Enter username"
-//             style={inputStyle}
-//             value={username}
-//             onChange={(e) => setUsername(e.target.value)}
-//           />
-
+//         <form onSubmit={handleSignup}>
 //           <label>Doctor ID:</label>
 //           <input
 //             type="text"
@@ -84,17 +91,35 @@
 //             onChange={(e) => setDoctorId(e.target.value)}
 //           />
 
-//           <label>Password:</label>
+//           <label>Username:</label>
+//           <input
+//             type="text"
+//             placeholder="Enter username"
+//             style={inputStyle}
+//             value={username}
+//             onChange={(e) => setUsername(e.target.value)}
+//           />
+
+//           <label>New Password:</label>
 //           <input
 //             type="password"
-//             placeholder="Enter password"
+//             placeholder="Enter new password"
 //             style={inputStyle}
 //             value={password}
 //             onChange={(e) => setPassword(e.target.value)}
 //           />
 
+//           <label>Confirm Password:</label>
+//           <input
+//             type="password"
+//             placeholder="Confirm password"
+//             style={inputStyle}
+//             value={confirmPassword}
+//             onChange={(e) => setConfirmPassword(e.target.value)}
+//           />
+
 //           <button type="submit" style={buttonStyle}>
-//             LOGIN
+//             SIGN UP
 //           </button>
 //         </form>
 
@@ -104,24 +129,32 @@
 //           </p>
 //         )}
 
-//         <p style={{ marginTop: "20px", textAlign: "center", fontSize: "14px" }}>
-//           Don&apos;t have an account?{" "}
+//         <p
+//           style={{ marginTop: "20px", textAlign: "center", fontSize: "14px" }}
+//         >
+//           Already have an account?{" "}
 //           <a
-//             href="/doctor-signup"
+//             href="/doctor-login"
 //             style={{ color: "#006d92", textDecoration: "none" }}
 //           >
-//             Sign up
+//             Sign in
 //           </a>
 //         </p>
 
-//         {/* Close Button that calls onClose */}
+//         {/* Close Button */}
 //         <button
 //           style={{
 //             ...buttonStyle,
 //             marginTop: "10px",
 //             backgroundColor: "#6b7280",
 //           }}
-//           onClick={onClose}
+//           onClick={() => {
+//             if (onClose) {
+//               onClose(); // closes box if passed as prop
+//             } else {
+//               navigate("/"); // fallback: go home
+//             }
+//           }}
 //         >
 //           Close
 //         </button>
@@ -133,40 +166,35 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const DoctorLogin = ({ onClose }) => {
-  const [name, setName] = useState("");
+export const DoctorSignup = ({ onClose }) => {
   const [doctorId, setDoctorId] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-
-    if (!name || !doctorId || !password) {
-      setMessage("⚠️ Please fill all fields!");
+    if (password !== confirmPassword) {
+      setMessage("⚠️ Passwords do not match!");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/doctor/login", {
+      const res = await fetch("http://localhost:5000/api/doctor/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, doctorId, password }),
+        body: JSON.stringify({ doctorId, name, password }),
       });
 
       const data = await res.json();
-
       if (res.ok) {
-        setMessage("✅ Doctor login successful!");
-        // localStorage.setItem("doctorToken", data.token); // Save JWT
-        // setTimeout(() => navigate("/doctor-dashboard"), 1000);
-        if (onClose) onClose();
-      // Redirect to dashboard
-      navigate("/doctor-dashboard");
+        setMessage("✅ Signup Successful! Please login.");
+        setTimeout(() => navigate("/doctor-login"), 1000);
       } else {
-        setMessage(data.message || "⚠️ Invalid credentials");
+        setMessage(data.message);
       }
     } catch (err) {
       setMessage("⚠️ Server error. Try again.");
@@ -174,13 +202,13 @@ export const DoctorLogin = ({ onClose }) => {
   };
 
   // Styles
-  const overlayStyle = {
-    position: "fixed",
-    inset: 0,
+  const pageStyle = {
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#f4f6f8",
+    padding: "20px",
   };
 
   const boxStyle = {
@@ -188,7 +216,8 @@ export const DoctorLogin = ({ onClose }) => {
     padding: "30px",
     borderRadius: "10px",
     boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-    width: "400px",
+    width: "100%",
+    maxWidth: "400px",
   };
 
   const inputStyle = {
@@ -213,21 +242,12 @@ export const DoctorLogin = ({ onClose }) => {
   };
 
   return (
-    <div style={overlayStyle}>
+    <div style={pageStyle}>
       <div style={boxStyle}>
         <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-          Doctor Login
+          Doctor Sign Up
         </h2>
-        <form onSubmit={handleLogin}>
-          <label>Username:</label>
-          <input
-            type="text"
-            placeholder="Enter username"
-            style={inputStyle}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-
+        <form onSubmit={handleSignup}>
           <label>Doctor ID:</label>
           <input
             type="text"
@@ -237,17 +257,35 @@ export const DoctorLogin = ({ onClose }) => {
             onChange={(e) => setDoctorId(e.target.value)}
           />
 
-          <label>Password:</label>
+          <label>Username:</label>
+          <input
+            type="text"
+            placeholder="Enter username"
+            style={inputStyle}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <label>New Password:</label>
           <input
             type="password"
-            placeholder="Enter password"
+            placeholder="Enter new password"
             style={inputStyle}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            placeholder="Confirm password"
+            style={inputStyle}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
           <button type="submit" style={buttonStyle}>
-            LOGIN
+            SIGN UP
           </button>
         </form>
 
@@ -257,13 +295,15 @@ export const DoctorLogin = ({ onClose }) => {
           </p>
         )}
 
-        <p style={{ marginTop: "20px", textAlign: "center", fontSize: "14px" }}>
-          Don&apos;t have an account?{" "}
+        <p
+          style={{ marginTop: "20px", textAlign: "center", fontSize: "14px" }}
+        >
+          Already have an account?{" "}
           <a
-            href="/doctor-signup"
+            href="/doctor-login"
             style={{ color: "#006d92", textDecoration: "none" }}
           >
-            Sign up
+            Sign in
           </a>
         </p>
 
@@ -274,7 +314,13 @@ export const DoctorLogin = ({ onClose }) => {
             marginTop: "10px",
             backgroundColor: "#6b7280",
           }}
-          onClick={onClose}
+          onClick={() => {
+            if (onClose) {
+              onClose();
+            } else {
+              navigate("/");
+            }
+          }}
         >
           Close
         </button>
