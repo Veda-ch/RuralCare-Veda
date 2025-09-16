@@ -1,0 +1,27 @@
+.scheme-container {
+  max-width: 800px; /* keeps content readable */
+  margin: 0 auto;
+  padding: 10px; /* reduced padding */
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.scheme-title {
+  font-size: 2.2rem; /* larger title */
+  margin-bottom: 15px; /* reduced space below title */
+  text-align: center;
+}
+
+.scheme-section {
+  margin-bottom: 15px; /* less space between sections */
+}
+
+.scheme-section h2 {
+  font-size: 1.5rem; /* bigger section headings */
+  margin-bottom: 8px; /* reduced space below headings */
+}
+
+.scheme-section p {
+  font-size: 1.1rem; /* slightly larger paragraph text */
+  margin: 0; /* remove extra margin */
+}

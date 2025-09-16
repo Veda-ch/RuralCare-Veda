@@ -1,19 +1,23 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Header from "./Pages/Header";
 import BookConsultations from "./Pages/BookConsultations";
 import AppointmentHistory from "./Pages/AppointmentHistory";
 
-import { Navbar } from "./Components/Navbar/Navbar";
+// Public Pages
 import { Home } from "./Pages/Home";
 import { About } from "./Pages/About";
 import { FAQ } from "./Pages/FAQ";
 import { Scheme } from "./Pages/Scheme";
 import { Support } from "./Pages/Support";
+
+// Auth Pages
 import { PatientLogin } from "./Pages/PatientLogin";
 import { PatientSignup } from "./Pages/PatientSignup";
 import { DoctorLogin } from "./Pages/DoctorLogin";
+
+// Protected Pages
 import { PatientDashboard } from "./Pages/PatientDashboard";
 import { DoctorSignup } from "./Pages/DoctorSignup";
 import DoctorDashboard from "./Pages/DoctorDashboard";
@@ -23,9 +27,11 @@ import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <div className="App">
-        <Navbar />
+        {/* Navbar/Header for all pages */}
+        <Header />
+
         <Routes>
           {/* Public Pages */}
           <Route path="/" element={<Home />} />
@@ -33,11 +39,11 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/scheme" element={<Scheme />} />
           <Route path="/support" element={<Support />} />
-           {/* Appointment-related pages */}
+
+          {/* Appointment-related pages */}
           <Route path="/book" element={<BookConsultations />} />
           <Route path="/history" element={<AppointmentHistory />} />
           <Route path="/profile" element={<h2>Patient Info Page (to be added)</h2>} />
-
 
           {/* Auth Pages */}
           <Route path="/patient-login" element={<PatientLogin />} />
@@ -50,11 +56,11 @@ function App() {
           {/* Protected Pages */}
           <Route path="/dashboard" element={<PatientDashboard />} />
 
-          {/* Redirect unknown routes to home */}
+          {/* Fallback for unknown routes */}
           <Route path="*" element={<Home />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 
